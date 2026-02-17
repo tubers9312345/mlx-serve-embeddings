@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.agrande.mlx-serve</string>
+
+    <key>ProgramArguments</key>
+    <array>
+        <!-- CUSTOMIZE: output of `which uv` -->
+        <string>/opt/homebrew/bin/uv</string>
+        <string>run</string>
+        <string>mlx-openai-server</string>
+        <string>launch</string>
+        <string>--model-type</string>
+        <string>embeddings</string>
+        <string>--model-path</string>
+        <string>mlx-community/Qwen3-Embedding-4B-4bit-DWQ</string>
+        <string>--host</string>
+        <string>127.0.0.1</string>
+        <string>--port</string>
+        <string>8000</string>
+        <string>--max-concurrency</string>
+        <string>4</string>
+        <string>--queue-timeout</string>
+        <string>300</string>
+        <string>--queue-size</string>
+        <string>100</string>
+    </array>
+
+    <!-- CUSTOMIZE: absolute path to this repo -->
+    <key>WorkingDirectory</key>
+    <string>/path/to/mlx-serve</string>
+
+    <key>RunAtLoad</key>
+    <true/>
+
+    <key>KeepAlive</key>
+    <dict>
+        <key>SuccessfulExit</key>
+        <false/>
+    </dict>
+
+    <key>ThrottleInterval</key>
+    <integer>10</integer>
+
+    <!-- CUSTOMIZE: absolute paths for log files -->
+    <key>StandardOutPath</key>
+    <string>/path/to/mlx-serve/logs/launchd-stdout.log</string>
+
+    <key>StandardErrorPath</key>
+    <string>/path/to/mlx-serve/logs/launchd-stderr.log</string>
+
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>PATH</key>
+        <string>/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin</string>
+        <!-- CUSTOMIZE: your home directory -->
+        <key>HOME</key>
+        <string>/Users/youruser</string>
+    </dict>
+</dict>
+</plist>
